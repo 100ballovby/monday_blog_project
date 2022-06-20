@@ -2,6 +2,7 @@ from flask import render_template, flash, redirect, url_for, request
 from flask_login import current_user, login_user, logout_user, login_required
 from app import app, login, db
 from forms import LoginForm, RegistrationForm, EditProfileForm, PostForm
+from wtforms.validators import ValidationError
 from models import User, Post
 from datetime import datetime
 
@@ -50,14 +51,21 @@ def register():
         return redirect(url_for('index'))  # перенаправим на главную
     form = RegistrationForm()
     if form.validate_on_submit():
-        user = User(
-            username=form.username.data,
-            email=form.email.data
-        )
-        user.set_password(form.password.data)
-        db.session.add(user)  # добавить пользователя в БД
-        db.session.commit()  # сохранить пользователя в БД
-        return redirect(url_for('login'))  # перенаправить на страницу входа
+        try:
+            form.check_username(form.username)
+            form.check_email(form.email)
+            user = User(
+                username=form.username.data,
+                email=form.email.data
+            )
+            user.set_password(form.password.data)
+            db.session.add(user)  # добавить пользователя в БД
+            db.session.commit()  # сохранить пользователя в БД
+            flash('Вы успешно зарегистрированы!', 'success')
+            return redirect(url_for('login'))  # перенаправить на страницу входа
+        except ValidationError:
+            flash('Пользователь с такими данными уже существует!', 'danger')
+            return redirect(url_for('register'))
     return render_template('register.html', form=form)
 
 

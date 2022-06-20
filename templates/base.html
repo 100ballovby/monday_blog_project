@@ -42,10 +42,10 @@
     </div>
 </nav>
 
-{% with messages = get_flashed_messages() %} <!-- собираю сообщения -->
+{% with messages = get_flashed_messages(with_categories=True) %} <!-- собираю сообщения -->
     {% if messages %} <!-- если удалось что-то собрать -->
-         {% for message in messages %}
-             <p>{{ message }}</p>
+         {% for category, message in messages %}
+             <div class="alert alert-{{ category }} my-1">{{ message }}</div>
          {% endfor %}
     {% endif %}
 {% endwith %}
