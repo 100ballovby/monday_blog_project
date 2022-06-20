@@ -3,28 +3,33 @@
 
 {% block content %}
 
-    <h1 class="text-center">Привет, {{ current_user.username }}</h1>
-    <form action="" method="post">
-        {{ form.hidden_tag() }}
-        <div class="md-3">
-            {{ form.post.label(class="form-label") }}
-            {{ form.post(class="form-control", rows=3) }}
-            {% for error in form.post.errors %}
-                <p style="color: red">{{ error }}</p>
-            {% endfor %}
-        </div>
-        <div class="md-3">
-            {{ form.submit(class="btn btn-primary") }}
-        </div>
-    </form>
-
+    {% if current_user.is_anonymous %}
+        <h1 class="text-center">Вы не вошли в аккаунт!</h1>
+        <p>Чтобы написать пост, пожалуйста, <a href="{{ url_for('login') }}">войдите</a>
+           или <a href="{{ url_for('register') }}">зарегистрируйтесь</a>.</p>
+    {% else %}
+        <h1 class="text-center">Привет, {{ current_user.username }}</h1>
+        <form action="" method="post">
+            {{ form.hidden_tag() }}
+            <div class="md-3">
+                {{ form.post.label(class="form-label") }}
+                {{ form.post(class="form-control", rows=3) }}
+                {% for error in form.post.errors %}
+                    <p style="color: red">{{ error }}</p>
+                {% endfor %}
+            </div>
+            <div class="md-3">
+                {{ form.submit(class="btn btn-primary") }}
+            </div>
+        </form>
+    {% endif %}
     <hr>
 
     {% for post in posts %}
-        <div class="card">
+        <div class="card my-2">
             <div class="card-header">{{ post.author.username }}</div>
             <div class="card-body">{{ post.body }}</div>
-            <div class="card-footer text-muted">{{ post.published }}</div>
+            <div class="card-footer text-muted">{{ post.published.strftime('%d/%m/%Y, %H:%M') }}</div>
         </div>
     {% endfor %}
 

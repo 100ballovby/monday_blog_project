@@ -4,7 +4,7 @@
     <img src="{{ user.avatar(128) }}" alt="{{ user.username }}-avatar">
     <h1>User: {{ user.username }}</h1>
     {% if user.about %}<p>{{ user.about }}</p>{% endif %}
-    {% if user.last_seen %}<p>{{ user.last_seen }}</p>{% endif %}
+    {% if user.last_seen %}<p>{{ user.last_seen.strftime('%d/%m/%Y, %H:%M') }}</p>{% endif %}
 
     {% if user == current_user %}
         <a href="{{ url_for('edit_profile') }}">Изменить профиль</a>
@@ -12,7 +12,10 @@
     <hr>
 
     {% for post in posts %}
-        <p>{{ post.author.username }}: <b>{{ post.body }}</b></p>
+        <div class="card my-2">
+            <div class="card-header">{{ post.published.strftime('%d/%m/%Y, %H:%M') }}</div>
+            <div class="card-body">{{ post.body }}</div>
+        </div>
     {% endfor %}
 
 {% endblock %}

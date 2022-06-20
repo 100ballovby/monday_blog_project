@@ -1,7 +1,8 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <form action="" class="form">
+    <form action="" class="form" method="post">
+        {{ form.hidden_tag() }}
         <div class="mb-3">
             {{ form.username.label(class="form-label") }}
             {{ form.username(class="form-control") }}
