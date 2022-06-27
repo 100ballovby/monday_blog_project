@@ -52,8 +52,6 @@ def register():
     form = RegistrationForm()
     if form.validate_on_submit():
         try:
-            form.check_username(form.username)
-            form.check_email(form.email)
             user = User(
                 username=form.username.data,
                 email=form.email.data
@@ -63,7 +61,7 @@ def register():
             db.session.commit()  # сохранить пользователя в БД
             flash('Вы успешно зарегистрированы!', 'success')
             return redirect(url_for('login'))  # перенаправить на страницу входа
-        except ValidationError:
+        except:
             flash('Пользователь с такими данными уже существует!', 'danger')
             return redirect(url_for('register'))
     return render_template('register.html', form=form)

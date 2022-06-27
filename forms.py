@@ -21,13 +21,13 @@ class RegistrationForm(FlaskForm):  # форма регистрации на о�
 
     def check_username(self, username):
         # найду пользователя в Базе Данных
-        user = User.query.filter_by(username=username.data)
+        user = User.query.filter_by(username=username)
         if user is not None:  # если пользователь есть в БД
             raise ValidationError('Пользователь с таким ником уже зарегистрирован!')
 
     def check_email(self, email):
         # найду пользователя в Базе Данных
-        user = User.query.filter_by(email=email.data)
+        user = User.query.filter_by(email=email)
         if user is not None:  # если пользователь есть в БД
             raise ValidationError('Пользователь с такой почтой уже зарегистрирован!')
 
